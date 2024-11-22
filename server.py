@@ -1,8 +1,9 @@
+from huggingface_hub import hf_hub_download  # To fetch models from Hugging Face
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Import CORS to handle cross-origin requests
-from huggingface_hub import hf_hub_download  # To fetch models from Hugging Face
-from tensorflow.keras.models import load_model  # This will still be needed as you're using Keras models
-from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
+from keras.preprocessing.image import img_to_array
+from keras.applications.vgg16 import preprocess_input
 import numpy as np
 from PIL import Image
 import io
@@ -14,7 +15,7 @@ CORS(app)
 
 # Load your trained fish identification model dynamically from Hugging Face Hub
 model_path = hf_hub_download(repo_id="glennoliva12/Model_Server", filename="fishcom_model.h5")
-model = load_model(model_path)  # No need for TensorFlow here, since you load the model directly
+model = load_model(model_path)
 
 # A dictionary mapping class indices to fish species names (adjusted to match your class names)
 FISH_LABELS = {
